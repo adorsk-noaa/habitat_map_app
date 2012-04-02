@@ -12,6 +12,7 @@ require([
 
 function($, Backbone, _, _s, ol, FacetApp, Facets, MapView, DownloadDialog){
 
+	/* Common functions */
 	facets = {};
 	formatAreaLabels = function(choices){
 		var choice_labels = [];
@@ -23,6 +24,28 @@ function($, Backbone, _, _s, ol, FacetApp, Facets, MapView, DownloadDialog){
 
 		return choice_labels;
 	};
+
+	paramsToFilters = function(params){
+		filters = [];
+		_.each(params, function(filter_param, facet_id){
+			if (! $.isEmptyObject(filter_param)){
+				filters.push.apply(filters, filter_param);
+			}
+		});
+		return filters;
+	};
+
+	/* Make the application frame. */
+	var app_model = new FacetApp.models.FacetAppModel({
+		id: "habitat-map-app"
+	});
+	var app = new FacetApp.views.FacetAppView({
+		el: '#habitat-map-app',
+		model: app_model
+	});
+
+
+	/* Make facets */
 
 	// Substrate facet.
 	substrate_facet_model = new Facets.models.FacetModel({
@@ -80,17 +103,6 @@ function($, Backbone, _, _s, ol, FacetApp, Facets, MapView, DownloadDialog){
 		view: feature_facet_view
 	};
 	feature_facet_view.formatChoiceCountLabels = formatAreaLabels;
-
-	paramsToFilters = function(params){
-		filters = [];
-		_.each(params, function(filter_param, facet_id){
-			if (! $.isEmptyObject(filter_param)){
-				filters.push.apply(filters, filter_param);
-			}
-		});
-		return filters;
-	};
-
 
 	// Define fetch method for each choice facet model.
 	_.each(facets, function(facet){
@@ -151,7 +163,7 @@ function($, Backbone, _, _s, ol, FacetApp, Facets, MapView, DownloadDialog){
 
 	// Create collection view.
 	f_fv = new Facets.views.FacetCollectionView({
-		el: '#facets',
+		el: app.getFacetsEl(),
 		model: f_fc,
 	});
 
@@ -160,13 +172,8 @@ function($, Backbone, _, _s, ol, FacetApp, Facets, MapView, DownloadDialog){
 		f_fv.addFacetView(facet['view']);
 	});
 
-	// Fetch the Facets.
-	$(document).ready(function(){
-		f_fc.each(function(model){model.fetch()});
-	});
 
-
-	/* MAP */
+	/* Make the MapView. */
 
 	sasi_max_extent= new OpenLayers.Bounds(-78.4985,32.1519,-65.7055,44.7674);
 
@@ -220,7 +227,7 @@ function($, Backbone, _, _s, ol, FacetApp, Facets, MapView, DownloadDialog){
 	});
 
 	mv_v = new MapView.views.MapViewView({
-		el: '#map',
+		el: app.getDataViewEl(),
 		model: mv_m
 	});
 
@@ -229,7 +236,9 @@ function($, Backbone, _, _s, ol, FacetApp, Facets, MapView, DownloadDialog){
 	});
 
 	mv_v.map.zoomToMaxExtent();
-	window.m = mv_v.map;
+
+
+	/* Make the Download Data Dialog */
 
 	var ddig_m = new DownloadDialog.models.DownloadDialogModel({
 		width: '400px',
@@ -281,17 +290,23 @@ function($, Backbone, _, _s, ol, FacetApp, Facets, MapView, DownloadDialog){
 
 	}, this);
 
+	// Add dialog launcher to app.
+	var ddig_launcher = $('<button class="button">Download Data...</button>');
+	$(ddig_launcher).on('click', function(){
+		ddig_v.show();
+	});
+	$('.tool-bar', app.el).append(ddig_launcher);
 
 
-	var app_model = new FacetApp.models.FacetAppModel({});
-	var app = new FacetApp.views.FacetAppView({
-		el: '#habitat-map-app',
-		model: app_model
+	// Listen for resizing.
+	$(window).on('resize', function(){
+		app.resize();
 	});
 
 	$(document).ready(function(){
-
-
+		$(app.el).css('height', $(window).height());
+		$(app.el).css('width', $(window).width());
+		app.resize();
 	});
 
 });
