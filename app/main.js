@@ -43,6 +43,8 @@ function($, Backbone, _, _s, ol, FacetApp, Facets, MapView, DownloadDialog){
 		el: '#habitat-map-app',
 		model: app_model
 	});
+	$('#habitat-map-app').css('position', 'absolute');
+	$('#habitat-map-app').css('z-index', 1);
 
 
 	/* Make facets */
@@ -227,16 +229,12 @@ function($, Backbone, _, _s, ol, FacetApp, Facets, MapView, DownloadDialog){
 	});
 
 	mv_v = new MapView.views.MapViewView({
-		el: app.getDataViewEl(),
 		model: mv_m
 	});
-
 	_.each(layer_views, function(layer_view){
 		mv_v.addLayerView(layer_view);
 	});
-
-	mv_v.map.zoomToMaxExtent();
-
+	app.addDataView(mv_v);
 
 	/* Make the Download Data Dialog */
 
@@ -270,6 +268,7 @@ function($, Backbone, _, _s, ol, FacetApp, Facets, MapView, DownloadDialog){
 		model: ddig_m
 	});
 	$(ddig_v.el).css('display', 'none');
+	$(ddig_v.el).css('z-index', 500);
 	$('body').append(ddig_v.el);
 
 	// Trigger changes on restriction changes.
@@ -307,6 +306,8 @@ function($, Backbone, _, _s, ol, FacetApp, Facets, MapView, DownloadDialog){
 
 	$(document).ready(function(){
 		$(window).resize();
+		app.trigger('ready');
+		//mv_v.map.zoomToMaxExtent();
 	});
 
 });
