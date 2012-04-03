@@ -300,13 +300,13 @@ function($, Backbone, _, _s, ol, FacetApp, Facets, MapView, DownloadDialog){
 
 	// Listen for resizing.
 	$(window).on('resize', function(){
+		$(app.el).css('height', $(window).height());
+		$(app.el).css('width', $(document.body).width());
 		app.resize();
 	});
 
 	$(document).ready(function(){
-		$(app.el).css('height', $(window).height());
-		$(app.el).css('width', $(window).width());
-		app.resize();
+		$(window).resize();
 	});
 
 });
