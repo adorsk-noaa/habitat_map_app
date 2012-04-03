@@ -1,4 +1,4 @@
-//var ASSETS_BASEURL = 'http://sasi.localhost/sasi_assets';
+//var ASSETS_BASEURL = 'localhost/sasi_assets';
 var ASSETS_BASEURL = '/sasi_assets';
 
 require.config({
@@ -44,27 +44,27 @@ require.config({
 	packages: [
 		{
 		  "name": "FacetApp",
-		  "location": "http://sasi.localhost/sasi_assets/js/facet_app/src"
+		  "location": ASSETS_BASEURL + "/js/facet_app/src"
 		},
 
 		{
 		  "name": "Facets",
-		  "location": "http://sasi.localhost/sasi_assets/js/facets/src"
+		  "location": ASSETS_BASEURL + "/js/facets/src"
 		},
 
 		{
 		  "name": "MapView",
-		  "location": "http://sasi.localhost/sasi_assets/js/mapview/src"
+		  "location": ASSETS_BASEURL + "/js/mapview/src"
 		},
 		
 		{
 		  "name": "Dialogs",
-		  "location": "http://sasi.localhost/sasi_assets/js/dialogs/src"
+		  "location": ASSETS_BASEURL + "/js/dialogs/src"
 		},
 
 		{
 		  "name": "DownloadDialog",
-		  "location": "http://sasi.localhost/sasi_assets/js/download_dialog/src"
+		  "location": ASSETS_BASEURL + "/js/download_dialog/src"
 		}
 
 	]

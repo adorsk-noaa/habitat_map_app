@@ -117,7 +117,7 @@ function($, Backbone, _, _s, ol, FacetApp, Facets, MapView, DownloadDialog){
 				url_params.push('ID_FIELD=' + model.get('count_id_field'));
 				url_params.push('LABEL_FIELD=' + model.get('count_label_field'));
 				url_params.push('VALUE_FIELD=' + model.get('count_value_field'));
-				options.url = 'http://sasi.localhost/habitat/get_choice_facet/?' + url_params.join('&');
+				options.url = '/habitat/get_choice_facet/?' + url_params.join('&');
 			}
 			Backbone.sync(method, model, options);
 		};
@@ -142,7 +142,7 @@ function($, Backbone, _, _s, ol, FacetApp, Facets, MapView, DownloadDialog){
 			filters = paramsToFilters(model.get('parameters'));
 			url_params.push('FILTERS=' + JSON.stringify(filters));
 			url_params.push('VALUE_FIELD=' + model.get('value_field'));
-			options.url = 'http://sasi.localhost/habitat/get_numeric_facet/?' + url_params.join('&');
+			options.url = '/habitat/get_numeric_facet/?' + url_params.join('&');
 		}
 		Backbone.sync(method, model, options);
 	};
@@ -189,7 +189,7 @@ function($, Backbone, _, _s, ol, FacetApp, Facets, MapView, DownloadDialog){
 	baselayers_m = new MapView.models.LayerModel({
 		id: "baselayers",
 		name: "Base Layers",
-		service_url: 'http://sasi.localhost/basemap/get_map',
+		service_url: '/basemap/get_map',
 		params: {}, 
 		options: _.extend({}, default_layer_options,{
 		})
@@ -200,7 +200,7 @@ function($, Backbone, _, _s, ol, FacetApp, Facets, MapView, DownloadDialog){
 	habitats_m = new MapView.models.LayerModel({
 		id: 'habitats',
 		name: "SASI Habitats",
-		service_url: 'http://sasi.localhost/habitat/get_map',
+		service_url: '/habitat/get_map',
 		params: {
 			layers: 'habitat',
 			transparent: true,
@@ -246,7 +246,7 @@ function($, Backbone, _, _s, ol, FacetApp, Facets, MapView, DownloadDialog){
 				label: 'Spreadsheet',
 				url: function(model){
 					var filters = JSON.stringify(paramsToFilters(this.get('restrictions')));
-					url = encodeURI(_s.sprintf("http://sasi.localhost/habitat/get_export/?TYPE=csv&FILTERS=%s", filters));
+					url = encodeURI(_s.sprintf("/habitat/get_export/?TYPE=csv&FILTERS=%s", filters));
 					return url;
 				},
 				filetype: 'csv'
@@ -256,7 +256,7 @@ function($, Backbone, _, _s, ol, FacetApp, Facets, MapView, DownloadDialog){
 				label: 'Shapefile',
 				url: function(model){
 					var filters = JSON.stringify(paramsToFilters(this.get('restrictions')));
-					url = encodeURI(_s.sprintf("http://sasi.localhost/habitat/get_export/?TYPE=shp&FILTERS=%s", filters));
+					url = encodeURI(_s.sprintf("/habitat/get_export/?TYPE=shp&FILTERS=%s", filters));
 					return url;
 				},
 				filetype: 'shp'
@@ -307,7 +307,10 @@ function($, Backbone, _, _s, ol, FacetApp, Facets, MapView, DownloadDialog){
 	$(document).ready(function(){
 		$(window).resize();
 		app.trigger('ready');
-		//mv_v.map.zoomToMaxExtent();
+
+		// Fetch the facets.
+		f_fc.each(function(model){model.fetch()});
+
 	});
 
 });
