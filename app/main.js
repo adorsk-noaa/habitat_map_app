@@ -271,6 +271,53 @@ function($, Backbone, _, _s, ol, FacetApp, Facets, MapView, DownloadDialog){
 	$(ddig_v.el).css('z-index', 500);
 	$('body').append(ddig_v.el);
 
+
+	// Make summary stats model and view.
+	SummaryBarModel = Backbone.Model.extend({
+		defaults: {
+			filtered_total: 0,
+			unfiltered_total: 0,
+			value_field: 'area',
+			restrictions: {}
+		},
+		sync: function(method, model, options) {
+			if (method == 'read'){
+				options = options || {};
+				url_params= [];
+				filters = paramsToFilters(model.get('restrictions'));
+				url_params.push('FILTERS=' + JSON.stringify(filters));
+				url_params.push('VALUE_FIELD=' + model.get('value_field'));
+				options.url = '/habitat/get_totals/?' + url_params.join('&');
+			}
+			Backbone.sync(method, model, options);
+		}
+	});
+	var summary_stats_m = new SummaryBarModel();
+
+	SummaryBarView = Backbone.View.extend({
+		initialize: function(){
+			this.model.on('change:restrictions', this.onChangeRestrictions, this);
+			this.model.on('change:filtered_total', this.render, this);
+		},
+		render: function(){
+			var total = this.model.get('unfiltered_total');
+			var current = this.model.get('filtered_total');
+			$(this.el).html(_s.sprintf("Currently selected area: %s km<sup>2</sup> (%.1f%% of %s km<sup>2</sup> total)", 
+					current.toExponential(1),
+					current/total * 100.0,
+					total.toExponential(1)
+					));
+		},
+		onChangeRestrictions: function(){
+			this.model.fetch();
+		}
+	});
+
+	var summary_stats_v = new SummaryBarView({
+		el: $('.summary-bar', app.el),
+		model: summary_stats_m,
+	});
+
 	// Trigger changes on restriction changes.
 	f_fc.on('change:restrictions', function(){
 
@@ -286,6 +333,8 @@ function($, Backbone, _, _s, ol, FacetApp, Facets, MapView, DownloadDialog){
 		// Update data export restrictions.
 		ddig_m.set({restrictions: restrictions});
 
+		// Update summary bar.
+		summary_stats_m.set({restrictions: restrictions});
 
 	}, this);
 
