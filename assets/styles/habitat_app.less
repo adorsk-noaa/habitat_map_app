@@ -1,3 +1,4 @@
+@import url('reset.css');
 @import url("/sasi_assets/js/jquery.ui/styles/jquery-ui-1.8.18.custom.css");
 @import url("/sasi_assets/js/facet_app/src/styles/facet_app-example.less");
 @import url("/sasi_assets/js/facets/src/styles/facets-example.less");
@@ -5,16 +6,58 @@
 @import url("/sasi_assets/js/dialogs/src/styles/dialogs-example.less");
 @import url("/sasi_assets/js/download_dialog/src/styles/download_dialog-example.less");
 
+body{
+}
+
+
+
+#header {
+	padding: 10px 50px;
+	margin-bottom: 15px;
+	border-bottom: medium groove #bcf;
+	color: black;
+	background: white;
+
+	.title{
+		display: inline;
+		h2 {
+			display: inline;
+			font-size: 200%;
+			font-family: sans-serif;
+		}
+	}
+
+	.logo {
+		display: inline;
+		margin-left: 25px;
+	}
+}
+
+#footer {
+	padding: 10px 50px;
+	margin-top: 15px;
+	border-top: medium groove #bcf;
+}
+
+#app-wrapper{
+	padding: 0px 50px;
+}
+
+
 .legend-image {
 	background: url('/sasi_assets/images/habitat_legend_180w.png') no-repeat;
 	width: 180px;
 	height: 127px;
 }
 
-#habitat-map-app {
-	height: 96%;
+#app-wrapper{
+	position: relative;
 	width: 100%;
-	padding-bottom: 2px;
+}
+
+#habitat-map-app {
+	height: 100%;
+	width: 100%;
 }
 
 .facets {

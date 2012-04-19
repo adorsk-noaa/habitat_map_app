@@ -348,8 +348,29 @@ function($, Backbone, _, _s, ol, FacetApp, Facets, MapView, DownloadDialog){
 
 	// Listen for resizing.
 	$(window).on('resize', function(){
-		$('#app-wrapper').css('height', $(window).height() - 20);
-		$('#app-wrapper').css('width', $(document.body).width());
+		var wrapper_el = $('#wrapper');
+		var wrapper_hpad = wrapper_el.outerHeight(true) - wrapper_el.height();
+		var wrapper_wpad = wrapper_el.outerWidth(true) - wrapper_el.width();
+		wrapper_el.css('height', $(window).height() - wrapper_hpad);
+		wrapper_el.css('width', $(document.body).width() - wrapper_wpad);
+
+		// Resize app wrapper.
+		var header_el = $('#header');
+		var footer_el = $('#footer');
+	
+		var app_wrapper_el = $('#app-wrapper');
+		var app_wrapper_hpad = app_wrapper_el.outerHeight(true) - app_wrapper_el.height();
+		var app_wrapper_wpad = app_wrapper_el.outerWidth(true) - app_wrapper_el.width();
+		app_wrapper_el.css('height', wrapper_el.height() - header_el.outerHeight(true) - footer_el.outerHeight(true) - app_wrapper_hpad - 1);
+		app_wrapper_el.css('width', wrapper_el.width() - app_wrapper_wpad);
+
+
+		// Resize app.
+		var app_el = $(app.el);
+		var app_hpad = app_el.outerHeight(true) - app_el.height();
+		var app_wpad = app_el.outerWidth(true) - app_el.width();
+		app_el.css('height', app_wrapper_el.height() - app_hpad - 1);
+		app_el.css('width', app_wrapper_el.width() - app_wpad - 1);
 		app.resize();
 	});
 
