@@ -352,7 +352,7 @@ function($, Backbone, _, _s, ol, FacetApp, Facets, MapView, DownloadDialog){
 		$('#app-wrapper').css('width', $(document.body).width());
 		app.resize();
 	});
-i
+
 	$(document).ready(function(){
 		$(window).resize();
 		app.trigger('ready');
