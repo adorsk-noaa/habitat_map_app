@@ -225,7 +225,8 @@ function($, Backbone, _, _s, ol, FacetApp, Facets, MapView, DownloadDialog){
 			maxExtent: sasi_max_extent,
 			restrictedExtent: sasi_max_extent,
 			resolutions: [0.025, 0.0125, 0.00625, 0.003125, 0.0015625]
-		}
+		},
+		graticule_intervals: [2]
 	});
 
 	mv_v = new MapView.views.MapViewView({
@@ -377,6 +378,9 @@ function($, Backbone, _, _s, ol, FacetApp, Facets, MapView, DownloadDialog){
 	$(document).ready(function(){
 		$(window).resize();
 		app.trigger('ready');
+
+		// Zoom to woods hole, zoom level 2.
+		mv_v.map.setCenter(new OpenLayers.LonLat(-70.6710, 41.5245), 2);
 
 		// Fetch the facets.
 		f_fc.each(function(model){model.fetch()});
