@@ -7,10 +7,10 @@ require([
   "FacetApp",
   "Facets",
   "MapView",
-  "DownloadDialog",
+  "ExportDialog",
 ],
 
-function($, Backbone, _, _s, ol, FacetApp, Facets, MapView, DownloadDialog){
+function($, Backbone, _, _s, ol, FacetApp, Facets, MapView, ExportDialog){
 
 	/* Common functions */
 	facets = {};
@@ -237,11 +237,11 @@ function($, Backbone, _, _s, ol, FacetApp, Facets, MapView, DownloadDialog){
 	});
 	app.addDataView(mv_v);
 
-	/* Make the Download Data Dialog */
+	/* Make the Export Data Dialog */
 
-	var ddig_m = new DownloadDialog.models.DownloadDialogModel({
+	var export_dialog_m = new ExportDialog.models.ExportDialogModel({
 		width: '400px',
-		download_options: [
+		export_options: [
 			{ 
 				id: 'csv',
 				label: 'Spreadsheet',
@@ -265,12 +265,12 @@ function($, Backbone, _, _s, ol, FacetApp, Facets, MapView, DownloadDialog){
 		]
 	});
 
-	var ddig_v = new DownloadDialog.views.DownloadDialogView({
-		model: ddig_m
+	var export_dialog_v = new ExportDialog.views.ExportDialogView({
+		model: export_dialog_m
 	});
-	$(ddig_v.el).css('display', 'none');
-	$(ddig_v.el).css('z-index', 500);
-	$('body').append(ddig_v.el);
+	$(export_dialog_v.el).css('display', 'none');
+	$(export_dialog_v.el).css('z-index', 500);
+	$('body').append(export_dialog_v.el);
 
 
 	// Make summary stats model and view.
@@ -332,7 +332,7 @@ function($, Backbone, _, _s, ol, FacetApp, Facets, MapView, DownloadDialog){
 		habitats_m.trigger('change change:params');
 
 		// Update data export restrictions.
-		ddig_m.set({restrictions: restrictions});
+		export_dialog_m.set({restrictions: restrictions});
 
 		// Update summary bar.
 		summary_stats_m.set({restrictions: restrictions});
@@ -340,11 +340,11 @@ function($, Backbone, _, _s, ol, FacetApp, Facets, MapView, DownloadDialog){
 	}, this);
 
 	// Add dialog launcher to app.
-	var ddig_launcher = $('<button class="button">Download Data...</button>');
-	$(ddig_launcher).on('click', function(){
-		ddig_v.show();
+	var export_dialog_launcher = $('<button class="button">Export Data...</button>');
+	$(export_dialog_launcher).on('click', function(){
+		export_dialog_v.show();
 	});
-	$('.tool-bar', app.el).append(ddig_launcher);
+	$('.tool-bar', app.el).append(export_dialog_launcher);
 
 
 	// Listen for resizing.

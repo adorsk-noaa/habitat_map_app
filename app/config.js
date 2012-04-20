@@ -63,8 +63,8 @@ require.config({
 		},
 
 		{
-		  "name": "DownloadDialog",
-		  "location": ASSETS_BASEURL + "/js/download_dialog/src"
+		  "name": "ExportDialog",
+		  "location": ASSETS_BASEURL + "/js/export_dialog/src"
 		}
 
 	]
