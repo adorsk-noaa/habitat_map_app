@@ -127,7 +127,7 @@ function($, Backbone, _, _s, ol, FacetApp, Facets, MapView, ExportDialog){
 	// Depth facet.
 	var depth_f_m = new Facets.models.FacetModel({
 		id: 'z',
-		label: 'Depth',
+		label: 'Depth (m)',
 		value_field: 'z',
 		field_label: 'Depth',
 		type: 'numeric',
@@ -177,13 +177,12 @@ function($, Backbone, _, _s, ol, FacetApp, Facets, MapView, ExportDialog){
 
 	/* Make the MapView. */
 
-	sasi_max_extent= new OpenLayers.Bounds(-78.4985,32.1519,-65.7055,44.7674);
+	sasi_max_extent = new OpenLayers.Bounds(-79, 31, -65, 45);
 
 	var default_layer_options = {
 		maxExtent: sasi_max_extent,
 		transitionEffect: 'resize'
 	};
-
 	var layers = {};
 
 	baselayers_m = new MapView.models.LayerModel({
@@ -204,10 +203,10 @@ function($, Backbone, _, _s, ol, FacetApp, Facets, MapView, ExportDialog){
 		params: {
 			layers: 'habitat',
 			transparent: true,
-			params: ''
+			params: '',
 		},
 		options: _.extend({}, default_layer_options, {
-			resolutions: [0.025, 0.0125, 0.00625, 0.003125, 0.0015625]
+			//resolutions: [0.025, 0.0125, 0.00625, 0.003125, 0.0015625]
 		})
 	});
 	habitats_v = new MapView.views.WMSLayerView({model: habitats_m});
@@ -224,18 +223,20 @@ function($, Backbone, _, _s, ol, FacetApp, Facets, MapView, ExportDialog){
 			allOverlays: true,
 			maxExtent: sasi_max_extent,
 			restrictedExtent: sasi_max_extent,
-			resolutions: [0.025, 0.0125, 0.00625, 0.003125, 0.0015625]
+			resolutions: [0.025, 0.0125, 0.00625, 0.003125, 0.0015625, 0.00078125]
 		},
 		graticule_intervals: [2]
 	});
 
 	mv_v = new MapView.views.MapViewView({
-		model: mv_m
+		model: mv_m,
 	});
 	_.each(layer_views, function(layer_view){
 		mv_v.addLayerView(layer_view);
 	});
 	app.addDataView(mv_v);
+
+	window.m = mv_v.map;
 
 	/* Make the Export Data Dialog */
 
